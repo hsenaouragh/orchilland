@@ -1,0 +1,149 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --color-bg: #F7F3EC;
+  --color-page: #F7F3EC;
+  --color-surface: #FFFFFF;
+  --color-panel: #FFFBF5;
+  --color-border: #EDE0CC;
+  --color-text: #1A1209;
+  --color-text-body: #4A3728;
+  --color-text-muted: #8C7660;
+  --color-text-faint: #C4B49E;
+  --color-accent: #B7863B;
+  --color-accent-hover: #9E6F2E;
+  --color-accent-light: #D8B46A;
+  --color-accent-faint: #F6EFE3;
+  --color-primary: #7C1D1D;
+  --color-primary-hover: #6B1515;
+  --color-primary-soft: #F3E8E8;
+  --color-green: #1D9E75;
+  --color-green-dark: #0F6E56;
+  --color-green-faint: #E8F8F2;
+  --color-danger: #DC2626;
+  --color-danger-faint: #FEF2F2;
+}
+
+.dark {
+  --color-bg: #0F172A;
+  --color-page: #111827;
+  --color-surface: #182235;
+  --color-panel: #101827;
+  --color-border: #334155;
+  --color-text: #F8FAFC;
+  --color-text-body: #D7DFEA;
+  --color-text-muted: #A8B3C3;
+  --color-text-faint: #718096;
+  --color-accent: #C59A55;
+  --color-accent-hover: #D7B36F;
+  --color-accent-light: #E3C889;
+  --color-accent-faint: #2A2330;
+  --color-primary: #B33A3A;
+  --color-primary-hover: #C55252;
+  --color-primary-soft: #351F2A;
+  --color-green: #34D399;
+  --color-green-dark: #10B981;
+  --color-green-faint: #14372F;
+  --color-danger: #F87171;
+  --color-danger-faint: #3B1E26;
+}
+
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color .25s ease, color .25s ease;
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+::selection {
+  background: var(--color-accent-light);
+  color: var(--color-text);
+}
+
+.dark .bg-white {
+  background-color: var(--color-surface) !important;
+}
+
+.dark .bg-gray-50,
+.dark .bg-gray-100,
+.dark .bg-emerald-50,
+.dark .bg-purple-50,
+.dark .bg-red-50 {
+  background-color: #1F2937 !important;
+}
+
+.dark .bg-gray-950 {
+  background-color: #050816 !important;
+}
+
+.dark .border-gray-100,
+.dark .border-gray-200,
+.dark .border-gray-300 {
+  border-color: var(--color-border) !important;
+}
+
+.dark .text-gray-900,
+.dark .text-gray-800,
+.dark .text-gray-700,
+.dark .text-gray-600,
+.dark .text-gray-950 {
+  color: var(--color-text) !important;
+}
+
+.dark .text-gray-500,
+.dark .text-gray-400,
+.dark .text-gray-300,
+.dark .text-amber-500 {
+  color: var(--color-text-muted) !important;
+}
+
+.dark .text-emerald-600,
+.dark .text-green-600 {
+  color: var(--color-green) !important;
+}
+
+.dark .text-purple-400 {
+  color: #C4B5FD !important;
+}
+
+.dark .shadow-sm,
+.dark .shadow {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .25) !important;
+}
+
+.dark .hover\:bg-gray-50:hover,
+.dark .hover\:bg-gray-100:hover {
+  background-color: #243044 !important;
+}
+
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: var(--color-panel);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: var(--color-text-faint);
+}
+
+.dark img {
+  color-scheme: light;
+}

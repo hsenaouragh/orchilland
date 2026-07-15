@@ -1,0 +1,90 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─── Orchilland design tokens (shared with the public site) ──────────────── */
+:root {
+  --color-bg: #F7F3EC;
+  --color-page: #F7F3EC;
+  --color-surface: #FFFFFF;
+  --color-panel: #FFFBF5;
+  --color-border: #EDE0CC;
+  --color-text: #1A1209;
+  --color-text-body: #4A3728;
+  --color-text-muted: #8C7660;
+  --color-text-faint: #C4B49E;
+  --color-accent: #B7863B;          /* orange */
+  --color-accent-hover: #9E6F2E;
+  --color-accent-light: #D8B46A;
+  --color-accent-faint: #F6EFE3;
+  --color-primary: #7C1D1D;         /* maroon */
+  --color-primary-hover: #6B1515;
+  --color-primary-soft: #F3E8E8;
+  --color-green: #1D9E75;
+  --color-green-dark: #0F6E56;
+  --color-green-faint: #E8F8F2;
+  --color-danger: #DC2626;
+  --color-danger-faint: #FEF2F2;
+}
+
+.dark {
+  --color-bg: #0F172A;
+  --color-page: #111827;
+  --color-surface: #182235;
+  --color-panel: #101827;
+  --color-border: #334155;
+  --color-text: #F8FAFC;
+  --color-text-body: #D7DFEA;
+  --color-text-muted: #A8B3C3;
+  --color-text-faint: #718096;
+  --color-accent: #C59A55;
+  --color-accent-hover: #D7B36F;
+  --color-accent-light: #E3C889;
+  --color-accent-faint: #2A2330;
+  --color-primary: #B33A3A;
+  --color-primary-hover: #C55252;
+  --color-primary-soft: #351F2A;
+  --color-green: #34D399;
+  --color-green-dark: #10B981;
+  --color-green-faint: #14372F;
+  --color-danger: #F87171;
+  --color-danger-faint: #3B1E26;
+}
+
+html { color-scheme: light; }
+html.dark { color-scheme: dark; }
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color .25s ease, color .25s ease;
+}
+
+* { border-color: var(--color-border); }
+
+::selection {
+  background: var(--color-accent-light);
+  color: var(--color-text);
+}
+
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: var(--color-panel);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: var(--color-text-faint);
+}
+
+/* Thin scrollbars inside data panels */
+.admin-scroll::-webkit-scrollbar { height: 8px; width: 8px; }
+.admin-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 999px;
+}
