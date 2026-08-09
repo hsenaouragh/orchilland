@@ -2,54 +2,95 @@
 @config "../tailwind.config.js";
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ─────────────────────────────────────────────────────────────
+   LIGHT MODE  — OrchillaLand palette
+   #FFFFFF   pure white    → surfaces / cards
+   #FFF5EE   warm cream    → page background
+   #D17C7C   muted rose    → accent / surface tint
+   #4E0000   deep maroon   → primary CTA / earth
+   #000000   near-black    → text
+───────────────────────────────────────────────────────────── */
 :root {
-  --color-bg: #F7F3EC;
-  --color-page: #F7F3EC;
-  --color-surface: #FFFFFF;
-  --color-panel: #FFFBF5;
-  --color-border: #EDE0CC;
-  --color-text: #1A1209;
-  --color-text-body: #4A3728;
-  --color-text-muted: #8C7660;
-  --color-text-faint: #C4B49E;
-  --color-accent: #B7863B;
-  --color-accent-hover: #9E6F2E;
-  --color-accent-light: #D8B46A;
-  --color-accent-faint: #F6EFE3;
-  --color-primary: #7C1D1D;
-  --color-primary-hover: #6B1515;
-  --color-primary-soft: #F3E8E8;
-  --color-green: #1D9E75;
-  --color-green-dark: #0F6E56;
-  --color-green-faint: #E8F8F2;
-  --color-danger: #DC2626;
+  /* Page & panel backgrounds */
+  --color-bg:           #FFF5EE;   /* warm cream — whole-page bg          */
+  --color-page:         #FFF5EE;
+  --color-surface:      #FFFFFF;   /* white — cards, modals, header        */
+  --color-panel:        #FFF9F5;   /* slightly warmer white — nested panels*/
+  --color-border:       rgba(78, 0, 0, 0.12); /* maroon-tinted border     */
+
+  /* Text */
+  --color-text:         #0A0A0A;   /* near-black headings                  */
+  --color-text-body:    #3A2020;   /* warm dark body                       */
+  --color-text-muted:   #7A5555;   /* muted rose-brown                     */
+  --color-text-faint:   #C4A0A0;   /* faint rose                           */
+
+  /* Accent — muted rose (#D17C7C family) */
+  --color-accent:       #D17C7C;
+  --color-accent-hover: #C06060;   /* one step darker                      */
+  --color-accent-light: #E8A8A8;   /* lighter rose tint                    */
+  --color-accent-faint: #FFF0EE;   /* barely-there rose wash               */
+
+  /* Primary CTA — deep maroon (#4E0000 family) */
+  --color-primary:      #4E0000;
+  --color-primary-hover:#6B0000;
+  --color-primary-soft: #FBE8E8;   /* very light maroon wash               */
+
+  /* Green — kept for success / correct states */
+  --color-green:        #1D9E75;
+  --color-green-dark:   #0F6E56;
+  --color-green-faint:  #E8F8F2;
+
+  /* Status */
+  --color-danger:       #DC2626;
   --color-danger-faint: #FEF2F2;
 }
 
+/* ─────────────────────────────────────────────────────────────
+   DARK MODE  — same hue family, lifted for readability
+   bg:      #2A1515  dark maroon-brown (not pitch black)
+   surface: #3D2020  clearly lifted cards
+   accent:  #F0B0B0  bright rose — easy to read
+   primary: #D45A5A  vivid maroon CTA button
+   text:    #FFF5F5  near-white with warm tint
+───────────────────────────────────────────────────────────── */
 .dark {
-  --color-bg: #0F172A;
-  --color-page: #111827;
-  --color-surface: #182235;
-  --color-panel: #101827;
-  --color-border: #334155;
-  --color-text: #F8FAFC;
-  --color-text-body: #D7DFEA;
-  --color-text-muted: #A8B3C3;
-  --color-text-faint: #718096;
-  --color-accent: #C59A55;
-  --color-accent-hover: #D7B36F;
-  --color-accent-light: #E3C889;
-  --color-accent-faint: #2A2330;
-  --color-primary: #B33A3A;
-  --color-primary-hover: #C55252;
-  --color-primary-soft: #351F2A;
-  --color-green: #34D399;
-  --color-green-dark: #10B981;
-  --color-green-faint: #14372F;
-  --color-danger: #F87171;
-  --color-danger-faint: #3B1E26;
+  /* Backgrounds — lifted so containers are clearly visible */
+  --color-bg:           #2A1515;   /* dark maroon-brown page bg            */
+  --color-page:         #2A1515;
+  --color-surface:      #3D2020;   /* cards / modals — clearly lifted      */
+  --color-panel:        #341A1A;   /* nested panels — just below surface   */
+  --color-border:       rgba(240, 176, 176, 0.22); /* bright rose border   */
+
+  /* Text — bright and warm, high contrast on dark bg */
+  --color-text:         #FFF5F5;   /* near-white warm heading text         */
+  --color-text-body:    #EDD5D5;   /* warm rose-white body                 */
+  --color-text-muted:   #C89090;   /* clearly readable muted               */
+  --color-text-faint:   #9A6868;   /* faint but still visible              */
+
+  /* Accent — bright rose, clearly readable */
+  --color-accent:       #F0B0B0;   /* bright muted rose                    */
+  --color-accent-hover: #F8C8C8;   /* even brighter on hover               */
+  --color-accent-light: #D88080;   /* contrast accent for icons/badges     */
+  --color-accent-faint: #3D2020;   /* rose-tinted container wash           */
+
+  /* Primary CTA — vivid maroon, clearly a button */
+  --color-primary:      #D45A5A;   /* bright maroon — unmistakably a CTA   */
+  --color-primary-hover:#E07070;   /* lighter on hover                     */
+  --color-primary-soft: #3A1818;   /* soft maroon wash for badge bgs       */
+
+  /* Green — brighter for dark bg */
+  --color-green:        #34D399;
+  --color-green-dark:   #10B981;
+  --color-green-faint:  #1A3D30;
+
+  /* Status */
+  --color-danger:       #F87171;
+  --color-danger-faint: #3D1414;
 }
 
+/* ─────────────────────────────────────────────────────────────
+   BASE
+───────────────────────────────────────────────────────────── */
 html {
   color-scheme: light;
 }
@@ -75,75 +116,109 @@ body {
   color: var(--color-text);
 }
 
+/* ─────────────────────────────────────────────────────────────
+   DARK MODE — Tailwind class overrides
+   These patch hardcoded Tailwind utility classes used across
+   components that haven't been migrated to CSS vars yet.
+───────────────────────────────────────────────────────────── */
+
+/* ── Backgrounds ─────────────────────────────────────────── */
 .dark .bg-white {
-  background-color: var(--color-surface) !important;
+  background-color: var(--color-surface) !important;  /* #3D2020 — lifted card */
 }
 
 .dark .bg-gray-50,
 .dark .bg-gray-100,
 .dark .bg-emerald-50,
 .dark .bg-purple-50,
-.dark .bg-red-50 {
-  background-color: #1F2937 !important;
+.dark .bg-red-50,
+.dark .bg-amber-50 {
+  background-color: var(--color-panel) !important;     /* #341A1A — nested panel */
 }
 
 .dark .bg-gray-950 {
-  background-color: #050816 !important;
+  background-color: #1A0A0A !important;                /* footer — deepest layer */
 }
 
+/* ── Borders ─────────────────────────────────────────────── */
 .dark .border-gray-100,
 .dark .border-gray-200,
 .dark .border-gray-300 {
-  border-color: var(--color-border) !important;
+  border-color: var(--color-border) !important;        /* bright rose border */
 }
 
+/* ── Headings ────────────────────────────────────────────── */
 .dark .text-gray-900,
 .dark .text-gray-800,
 .dark .text-gray-700,
-.dark .text-gray-600,
 .dark .text-gray-950 {
-  color: var(--color-text) !important;
+  color: var(--color-text) !important;                 /* #FFF5F5 warm near-white */
 }
 
-.dark .text-gray-500,
+/* ── Body / muted ────────────────────────────────────────── */
+.dark .text-gray-600,
+.dark .text-gray-500 {
+  color: var(--color-text-body) !important;            /* #EDD5D5 — clearly readable */
+}
+
 .dark .text-gray-400,
-.dark .text-gray-300,
-.dark .text-amber-500 {
-  color: var(--color-text-muted) !important;
+.dark .text-gray-300 {
+  color: var(--color-text-muted) !important;           /* #C89090 — muted but visible */
 }
 
+/* ── Accent / amber ──────────────────────────────────────── */
+.dark .text-amber-500,
+.dark .text-amber-600 {
+  color: var(--color-accent) !important;               /* #F0B0B0 bright rose */
+}
+
+/* ── Green ───────────────────────────────────────────────── */
 .dark .text-emerald-600,
 .dark .text-green-600 {
-  color: var(--color-green) !important;
+  color: var(--color-green) !important;                /* #34D399 */
 }
 
+/* ── Purple ──────────────────────────────────────────────── */
 .dark .text-purple-400 {
-  color: #C4B5FD !important;
+  color: #D8B4FE !important;
 }
 
+/* ── Shadows — softer, warm-tinted ──────────────────────── */
 .dark .shadow-sm,
 .dark .shadow {
-  box-shadow: 0 10px 30px rgba(0, 0, 0, .25) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .35) !important;
 }
 
+/* ── Hover backgrounds ───────────────────────────────────── */
 .dark .hover\:bg-gray-50:hover,
 .dark .hover\:bg-gray-100:hover {
-  background-color: #243044 !important;
+  background-color: var(--color-accent-faint) !important; /* #3D2020 rose wash */
 }
 
+/* ── Form elements ───────────────────────────────────────── */
 .dark input,
 .dark textarea,
 .dark select {
-  background-color: var(--color-panel);
-  color: var(--color-text);
-  border-color: var(--color-border);
+  background-color: var(--color-panel);   /* #341A1A */
+  color: var(--color-text);               /* #FFF5F5 */
+  border-color: var(--color-border);      /* bright rose border */
 }
 
 .dark input::placeholder,
 .dark textarea::placeholder {
-  color: var(--color-text-faint);
+  color: var(--color-text-faint);         /* #9A6868 — visible but subtle */
 }
 
+/* ── Buttons — ensure minimum brightness on dark ─────────── */
+/* Primary CTA buttons using inline bg-[#4E0000] / bg-[#7C1D1D] */
+.dark [style*="background: #4E0000"],
+.dark [style*="background:#4E0000"],
+.dark [style*="background: #7C1D1D"],
+.dark [style*="background:#7C1D1D"] {
+  background: var(--color-primary) !important;   /* #D45A5A vivid maroon */
+}
+
+/* ── Keep flag images and PNGs light in dark mode ─────────── */
 .dark img {
   color-scheme: light;
 }

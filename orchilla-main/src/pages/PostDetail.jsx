@@ -141,8 +141,6 @@ const PostDetail = () => {
                   : <Heart style={{ width: 24, height: 24, color: 'var(--color-text)' }} />}
               </button>
               <Comment style={{ width: 24, height: 24, color: 'var(--color-text)' }} />
-              <PaperPlane style={{ width: 24, height: 24, color: 'var(--color-text)' }} />
-              <Bookmark style={{ width: 24, height: 24, color: 'var(--color-text)', marginLeft: 'auto' }} />
             </div>
             <p className='text-sm font-semibold text-[var(--color-text)] mt-2'>{likesCount} like{likesCount !== 1 ? 's' : ''}</p>
           </div>
