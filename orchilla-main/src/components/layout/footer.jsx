@@ -1,68 +1,136 @@
-import React from 'react'
-import { FaFacebook, FaInstagram, FaTiktok } from 'react-icons/fa'
-import { HiLocationMarker } from 'react-icons/hi'
-import { MdComputer } from 'react-icons/md'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaYoutube } from 'react-icons/fa'
+import { ArrowRight, Globe } from '@gravity-ui/icons'
+import logo from '../../assets/orchillaland.png'
 
-const links = [
-  ['Home', '/'],
-  ['Courses', '/courses'],
-  ['Placement Test', '/placement-test'],
-  ['Books', '/books'],
-  ['Posts', '/posts'],
-]
+const Footer = () => {
+  const [email, setEmail] = useState('')
+  const [subscribed, setSubscribed] = useState(false)
 
-const Footer = () => (
-  <footer className='bg-gray-950 text-white mt-16'>
-    <div className='container mx-auto px-6 py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10'>
+  const handleSubscribe = (e) => {
+    e.preventDefault()
+    if (email.trim() && email.includes('@')) {
+      setSubscribed(true)
+      setEmail('')
+    }
+  }
 
-      {/* Brand */}
-      <div className='sm:col-span-2 lg:col-span-1 space-y-4'>
-        <div className='flex items-center gap-2 text-xl font-bold uppercase'>
-          <MdComputer className='text-[#1D9E75] text-3xl' />
-          <span>Orchilland</span>
+  return (
+    <footer
+      className='mt-20 text-white rounded-t-[40px] pt-16 pb-10 px-6 sm:px-12'
+      style={{ backgroundColor: 'var(--color-footer-bg)' }}
+    >
+      <div className='max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 pb-14 border-b border-white/10'>
+        {/* ── Column 1: Brand & Mission ── */}
+        <div className='lg:col-span-2 space-y-5'>
+          <Link to='/' className='inline-block'>
+            <div className='flex items-center gap-3 bg-white/10 px-4 py-2 rounded-full w-fit backdrop-blur-sm'>
+              <img src={logo} alt='OrchillaLand' className='h-8 w-auto brightness-200 contrast-200' />
+            </div>
+          </Link>
+          <p className='text-sm text-white/70 max-w-sm leading-relaxed'>
+            Languages for a bigger tomorrow. Learn with confidence through adaptive lessons, native speaker practice, and verified certifications.
+          </p>
+
+          {/* Social Icons */}
+          <div className='flex items-center gap-3 pt-2'>
+            {[
+              { icon: FaFacebookF, href: '#facebook', label: 'Facebook' },
+              { icon: FaTwitter, href: '#twitter', label: 'Twitter' },
+              { icon: FaInstagram, href: '#instagram', label: 'Instagram' },
+              { icon: FaLinkedinIn, href: '#linkedin', label: 'LinkedIn' },
+              { icon: FaYoutube, href: '#youtube', label: 'YouTube' },
+            ].map(({ icon: Icon, href, label }) => (
+              <a
+                key={label}
+                href={href}
+                aria-label={label}
+                className='w-9 h-9 rounded-full bg-white/10 hover:bg-[var(--color-accent)] text-white/80 hover:text-white flex items-center justify-center transition-all duration-200'
+              >
+                <Icon size={14} />
+              </a>
+            ))}
+          </div>
         </div>
-        <p className='text-sm text-white/40 leading-relaxed max-w-xs'>
-          Learn languages with confidence. Adaptive courses, real tutors, and a community that keeps you moving forward.
-        </p>
-        <div className='flex gap-4 pt-1'>
-          {[HiLocationMarker, FaFacebook, FaInstagram, FaTiktok].map((Icon, i) => (
-            <a key={i} href='#' className='text-white/40 hover:text-[#1D9E75] transition-colors duration-200'>
-              <Icon size={20} />
-            </a>
-          ))}
+
+        {/* ── Column 2: Platform ── */}
+        <div className='space-y-4'>
+          <h4 className='text-sm font-bold tracking-wider uppercase text-white/90'>
+            Platform
+          </h4>
+          <ul className='space-y-2.5 text-xs text-white/70'>
+            <li><Link to='/courses' className='hover:text-white transition-colors'>Courses</Link></li>
+            <li><Link to='/offers' className='hover:text-white transition-colors'>Offers</Link></li>
+            <li><Link to='/placement-test' className='hover:text-white transition-colors'>Placement Tests</Link></li>
+            <li><a href='/#reviews' className='hover:text-white transition-colors'>Reviews</a></li>
+            <li><a href='/#why-choose' className='hover:text-white transition-colors'>About</a></li>
+            <li><Link to='/books' className='hover:text-white transition-colors'>Books</Link></li>
+            <li><Link to='/posts' className='hover:text-white transition-colors'>Community Posts</Link></li>
+          </ul>
+        </div>
+
+        {/* ── Column 3: Support ── */}
+        <div className='space-y-4'>
+          <h4 className='text-sm font-bold tracking-wider uppercase text-white/90'>
+            Support
+          </h4>
+          <ul className='space-y-2.5 text-xs text-white/70'>
+            <li><a href='#help' className='hover:text-white transition-colors'>Help Center</a></li>
+            <li><a href='#contact' className='hover:text-white transition-colors'>Contact Us</a></li>
+            <li><a href='#faqs' className='hover:text-white transition-colors'>FAQs</a></li>
+            <li><a href='#terms' className='hover:text-white transition-colors'>Terms of Service</a></li>
+            <li><a href='#privacy' className='hover:text-white transition-colors'>Privacy Policy</a></li>
+          </ul>
+        </div>
+
+        {/* ── Column 4: Newsletter ── */}
+        <div className='space-y-4'>
+          <h4 className='text-sm font-bold tracking-wider uppercase text-white/90'>
+            Subscribe to our newsletter
+          </h4>
+          <p className='text-xs text-white/70 leading-relaxed'>
+            Get learning tips, offers and updates straight to your inbox.
+          </p>
+
+          <form onSubmit={handleSubscribe} className='relative'>
+            <div className='flex items-center bg-[#FFF5EE] dark:bg-[#3D2020] rounded-full p-1 border border-white/20 shadow-inner'>
+              <input
+                type='email'
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder='Your email'
+                required
+                className='flex-1 bg-transparent px-4 text-xs text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 outline-none border-none'
+              />
+              <button
+                type='submit'
+                aria-label='Subscribe'
+                className='w-8 h-8 rounded-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white flex items-center justify-center shrink-0 transition-all duration-200'
+              >
+                <ArrowRight style={{ width: 14, height: 14 }} />
+              </button>
+            </div>
+            {subscribed && (
+              <p className='text-[11px] text-emerald-400 mt-2 font-medium'>
+                ✓ Thank you for subscribing!
+              </p>
+            )}
+          </form>
         </div>
       </div>
 
-      {/* Links */}
-      <div>
-        <h3 className='text-sm font-semibold uppercase tracking-widest text-white/30 mb-5'>Navigation</h3>
-        <ul className='space-y-3'>
-          {links.map(([label, href]) => (
-            <li key={label}>
-              <a href={href} className='text-sm text-white/60 hover:text-[#1D9E75] transition-colors duration-200'>{label}</a>
-            </li>
-          ))}
-        </ul>
+      {/* ── Sub-Footer ── */}
+      <div className='max-w-7xl mx-auto pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/50'>
+        <p>© 2026 OrchillaLand. All rights reserved.</p>
+
+        <div className='flex items-center gap-2 cursor-pointer hover:text-white transition-colors'>
+          <Globe style={{ width: 14, height: 14 }} />
+          <span>English ⌵</span>
+        </div>
       </div>
-
-      {/* Contact */}
-      <div>
-        <h3 className='text-sm font-semibold uppercase tracking-widest text-white/30 mb-5'>Contact</h3>
-        <ul className='space-y-3 text-sm text-white/60'>
-          <li className='flex gap-1'><HiLocationMarker className='hover:text-[#1D9E75]'/> 12 Rue de la Paix, Algiers</li>
-          <li><a href='tel:+213555000111' className='hover:text-[#1D9E75] transition-colors duration-200'>+213 555 000 111</a></li>
-          <li><a href='mailto:hello@orchilland.com' className='hover:text-[#1D9E75] transition-colors duration-200'>hello@orchilland.com</a></li>
-        </ul>
-
-      </div>
-
-    </div>
-
-    {/* Copyright */}
-    <div className='border-t border-white/5 py-5 text-center text-xs text-white/20'>
-      © 2026 Orchilland for Learning. All rights reserved.
-    </div>
-  </footer>
-)
+    </footer>
+  )
+}
 
 export default Footer

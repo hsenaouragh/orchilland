@@ -43,6 +43,11 @@
   /* Status */
   --color-danger:       #DC2626;
   --color-danger-faint: #FEF2F2;
+
+  /* Auxiliary Section Tints (from reference design) */
+  --color-lavender-tint:#F0EEF9;
+  --color-mint-tint:    #EEF8F3;
+  --color-footer-bg:    #220808;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -86,6 +91,11 @@
   /* Status */
   --color-danger:       #F87171;
   --color-danger-faint: #3D1414;
+
+  /* Auxiliary Section Tints (dark mode) */
+  --color-lavender-tint:#321F35;
+  --color-mint-tint:    #1C3328;
+  --color-footer-bg:    #160404;
 }
 
 /* ─────────────────────────────────────────────────────────────

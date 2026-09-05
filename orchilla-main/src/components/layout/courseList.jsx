@@ -8,15 +8,16 @@ import { fetchCourses, fetchEnrollmentSummaries, fetchApplications } from '../..
 const PER_PAGE = 8
 
 const SkeletonCard = () => (
-  <div className='bg-white rounded-2xl border border-gray-100 overflow-hidden animate-pulse'>
-    <div className='h-28 bg-gray-100' />
-    <div className='px-5 pt-4 pb-5 space-y-3'>
-      <div className='h-3 bg-gray-100 rounded w-1/3' />
-      <div className='h-12 bg-gray-50 rounded-xl' />
-      <div className='flex justify-between'>
-        <div className='h-6 bg-gray-100 rounded-full w-16' />
-        <div className='h-6 bg-gray-100 rounded-full w-20' />
+  <div className='bg-white dark:bg-[#3D2020] rounded-3xl border border-[var(--color-border)] overflow-hidden animate-pulse'>
+    <div className='h-44 bg-gray-100 dark:bg-gray-800' />
+    <div className='p-5 space-y-3'>
+      <div className='h-4 bg-gray-100 dark:bg-gray-800 rounded w-1/3' />
+      <div className='h-10 bg-gray-50 dark:bg-gray-700/50 rounded-xl' />
+      <div className='flex justify-between pt-2'>
+        <div className='h-5 bg-gray-100 dark:bg-gray-800 rounded-full w-20' />
+        <div className='h-5 bg-gray-100 dark:bg-gray-800 rounded-full w-16' />
       </div>
+      <div className='h-9 bg-gray-100 dark:bg-gray-800 rounded-full w-full mt-4' />
     </div>
   </div>
 )
@@ -71,18 +72,25 @@ const CourseList = () => {
   const onFilter = (next) => { setFilters(next); setPage(1) }
   const handlePage = (p) => {
     setPaging(true)
-    setTimeout(() => { setPage(p); setPaging(false) }, 400)
+    setTimeout(() => { setPage(p); setPaging(false) }, 300)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (
-    <div className='space-y-12'>
+    <div className='space-y-14'>
       {/* ── My Courses ── */}
       {myCourses.length > 0 && (
         <section>
-          <h2 className='text-2xl font-bold text-[var(--color-text)]'>My Courses</h2>
-          <p className='text-sm text-gray-400 mt-1 mb-5'>Courses you have access to — pick up where you left off.</p>
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5'>
+          <div className='mb-6'>
+            <span className='text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]'>
+              Enrolled Courses
+            </span>
+            <h2 className='text-2xl font-extrabold text-[var(--color-text)] mt-1'>My Courses</h2>
+            <p className='text-sm text-[var(--color-text-muted)] mt-1'>
+              Continue your lessons and track your progress where you left off.
+            </p>
+          </div>
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6'>
             {myCourses.map((c, i) => <CourseCard key={c.id} c={c} index={i} enrolled />)}
           </div>
         </section>
@@ -90,50 +98,64 @@ const CourseList = () => {
 
       {/* ── New courses for you ── */}
       <section>
-        <h2 className='text-2xl font-bold text-[var(--color-text)]'>New courses for you</h2>
-        <p className='text-sm text-gray-400 mt-1 mb-5'>Courses you haven’t enrolled in yet. Apply and upload your receipt to get access.</p>
+        <div className='mb-6'>
+          <span className='text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]'>
+            Discover More
+          </span>
+          <h2 className='text-2xl font-extrabold text-[var(--color-text)] mt-1'>Available Courses</h2>
+          <p className='text-sm text-[var(--color-text-muted)] mt-1'>
+            Choose your language and level. Apply and upload your payment receipt to gain instant access.
+          </p>
+        </div>
 
         <Filter onChange={onFilter} />
 
-        <div className='flex items-center justify-between mt-6 mb-4'>
-          <p className='text-sm text-gray-400'>
-            Showing <span className='font-medium text-gray-600'>{newCourses.length}</span> course{newCourses.length !== 1 ? 's' : ''}
+        <div className='flex items-center justify-between mt-6 mb-4 px-1'>
+          <p className='text-xs font-semibold text-[var(--color-text-muted)]'>
+            Showing <span className='font-bold text-[var(--color-text)]'>{newCourses.length}</span> courses
           </p>
         </div>
 
         {loading || paging ? (
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6'>
             {Array(PER_PAGE).fill(0).map((_, i) => <SkeletonCard key={i} />)}
           </div>
         ) : newCourses.length ? (
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5'>
-            {paginated.map((c, i) => <CourseCard key={c.id} c={c} index={i} pending={pendingIds.has(String(c.id))} />)}
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6'>
+            {paginated.map((c, i) => (
+              <CourseCard
+                key={c.id}
+                c={c}
+                index={i}
+                pending={pendingIds.has(String(c.id))}
+              />
+            ))}
           </div>
         ) : (
-          <div className='flex flex-col items-center justify-center py-24 text-center'>
-            <p className='text-5xl mb-4'>🔍</p>
-            <p className='text-gray-700 font-medium mb-1'>No courses found</p>
-            <p className='text-gray-400 text-sm'>Try adjusting or clearing your filters</p>
+          <div className='flex flex-col items-center justify-center py-20 text-center bg-white dark:bg-[#3D2020] rounded-3xl border border-[var(--color-border)] p-8'>
+            <span className='text-4xl mb-3'>🔍</span>
+            <h3 className='text-base font-bold text-[var(--color-text)] mb-1'>No courses found</h3>
+            <p className='text-xs text-[var(--color-text-muted)]'>Try clearing or adjusting your filter selections</p>
           </div>
         )}
 
         {totalPages > 1 && !loading && !paging && (
-          <div className='flex items-center justify-center gap-2 mt-10'>
+          <div className='flex items-center justify-center gap-2 mt-12'>
             <button
               onClick={() => handlePage(page - 1)}
               disabled={page === 1}
-              className='px-4 py-2 text-sm rounded-xl border border-gray-200 text-gray-400 hover:border-[#1D9E75] hover:text-[#1D9E75] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200'
+              className='px-4 py-2 text-xs font-bold rounded-full border border-[var(--color-border)] text-[var(--color-text-muted)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] disabled:opacity-30 disabled:cursor-not-allowed transition-all'
             >
-              ←
+              Previous
             </button>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
               <button
                 key={p}
                 onClick={() => handlePage(p)}
-                className={`w-9 h-9 text-sm rounded-xl border transition-all duration-200 ${
+                className={`w-9 h-9 text-xs font-bold rounded-full transition-all ${
                   page === p
-                    ? 'bg-[#1D9E75] text-white border-[#1D9E75]'
-                    : 'border-gray-200 text-gray-400 hover:border-[#1D9E75] hover:text-[#1D9E75]'
+                    ? 'bg-[var(--color-primary)] text-white shadow-md'
+                    : 'border border-[var(--color-border)] text-[var(--color-text-body)] hover:border-[var(--color-accent)]'
                 }`}
               >
                 {p}
@@ -142,9 +164,9 @@ const CourseList = () => {
             <button
               onClick={() => handlePage(page + 1)}
               disabled={page === totalPages}
-              className='px-4 py-2 text-sm rounded-xl border border-gray-200 text-gray-400 hover:border-[#1D9E75] hover:text-[#1D9E75] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200'
+              className='px-4 py-2 text-xs font-bold rounded-full border border-[var(--color-border)] text-[var(--color-text-muted)] hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] disabled:opacity-30 disabled:cursor-not-allowed transition-all'
             >
-              →
+              Next
             </button>
           </div>
         )}

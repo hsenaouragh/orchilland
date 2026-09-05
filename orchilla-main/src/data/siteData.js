@@ -2,12 +2,51 @@ import French from '../assets/french.png'
 import English from '../assets/english.png'
 import Italian from '../assets/italy.png'
 import Korean from '../assets/korea.png'
+import LondonLandmark from '../assets/london_landmark.jpg'
+import ParisLandmark from '../assets/paris_landmark.jpg'
+import RomeLandmark from '../assets/rome_landmark.jpg'
+import SeoulLandmark from '../assets/seoul_landmark.jpg'
+
+export const LANDMARK_IMAGES = {
+  English: LondonLandmark,
+  French: ParisLandmark,
+  Italian: RomeLandmark,
+  Korean: SeoulLandmark,
+}
 
 const LANGUAGE_META = {
-  English: { color: '#378ADD', flag: English },
-  French: { color: '#E85D26', flag: French },
-  Italian: { color: '#D4537E', flag: Italian },
-  Korean: { color: '#1D9E75', flag: Korean },
+  English: {
+    color: '#378ADD',
+    flag: English,
+    landmark: LondonLandmark,
+    learners: '12.4K+',
+    rating: '4.8 (1.2K reviews)',
+    tagline: 'Build fluency and confidence in real-life situations.',
+  },
+  French: {
+    color: '#E85D26',
+    flag: French,
+    landmark: ParisLandmark,
+    learners: '10.2K+',
+    rating: '4.7 (1.1K reviews)',
+    tagline: 'Master the language of culture, travel and opportunity.',
+  },
+  Italian: {
+    color: '#D4537E',
+    flag: Italian,
+    landmark: RomeLandmark,
+    learners: '8.6K+',
+    rating: '4.6 (980 reviews)',
+    tagline: 'Speak like a local and discover Italy\'s rich culture.',
+  },
+  Korean: {
+    color: '#1D9E75',
+    flag: Korean,
+    landmark: SeoulLandmark,
+    learners: '7.4K+',
+    rating: '4.7 (1,034 reviews)',
+    tagline: 'Learn the language of K-pop, tech and innovation.',
+  },
 }
 
 const TYPE_FALLBACK = 'Group courses'
@@ -63,6 +102,10 @@ export const normalizeCourse = (row = {}) => {
     price_amount: isPaid ? formatDinars(amount) : null,
     amount,
     flag: visuals.flag,
+    landmark: row.landmark || visuals.landmark,
+    learners: row.learners || visuals.learners || '5.2K+ learners',
+    rating: row.rating || visuals.rating || '4.8 (850 reviews)',
+    tagline: row.tagline || visuals.tagline || row.description || '',
     status: row.status || 'available',
     description: row.description || '',
     imageUrl: row.image_url || row.imageUrl || null,

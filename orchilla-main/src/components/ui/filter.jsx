@@ -18,15 +18,15 @@ const Filter = ({ onChange }) => {
   }
 
   return (
-    <div className='bg-white rounded-2xl border border-gray-100 px-4 py-3 flex flex-wrap items-center gap-3 max-w-6xl mx-auto'>
+    <div className='bg-white dark:bg-[#3D2020] rounded-2xl border border-[var(--color-border)] px-4 py-3 flex flex-wrap items-center gap-3 max-w-6xl mx-auto shadow-sm'>
       {filters.map(({ label, key, options }) => (
         <div key={key} className='relative'>
           <button
             onClick={() => setOpen(open === key ? null : key)}
-            className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm border transition-all duration-200 ${
+            className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200 ${
               selected[key]
-                ? 'bg-[#1D9E75] text-white border-[#1D9E75]'
-                : 'text-gray-500 border-gray-200 hover:border-[#1D9E75] hover:text-[#1D9E75]'
+                ? 'bg-[var(--color-primary)] text-white border-[var(--color-primary)] shadow-sm'
+                : 'text-[var(--color-text-body)] border-[var(--color-border)] hover:border-[var(--color-accent)] hover:bg-[var(--color-accent-faint)]'
             }`}
           >
             {selected[key] ?? label}
@@ -34,15 +34,15 @@ const Filter = ({ onChange }) => {
           </button>
 
           {open === key && (
-            <div className='absolute top-full mt-2 left-0 bg-white border border-gray-100 rounded-xl shadow-sm z-20 min-w-[160px] py-1'>
+            <div className='absolute top-full mt-2 left-0 bg-white dark:bg-[#3D2020] border border-[var(--color-border)] rounded-2xl shadow-xl z-20 min-w-[170px] py-1.5 animate-fade-in'>
               {options.map(opt => (
                 <button
                   key={opt}
                   onClick={() => toggle(key, opt)}
-                  className={`w-full text-left px-4 py-2 text-sm transition-colors duration-150 ${
+                  className={`w-full text-left px-4 py-2 text-xs transition-colors duration-150 ${
                     selected[key] === opt
-                      ? 'text-[#1D9E75] font-medium'
-                      : 'text-gray-600 hover:bg-gray-50'
+                      ? 'text-[var(--color-primary)] dark:text-[var(--color-accent)] font-bold bg-[var(--color-accent-faint)]'
+                      : 'text-[var(--color-text-body)] hover:bg-[var(--color-panel)]'
                   }`}
                 >
                   {opt}
@@ -56,9 +56,9 @@ const Filter = ({ onChange }) => {
       {Object.values(selected).some(Boolean) && (
         <button
           onClick={() => { setSelected({ price: null, language: null, type: null }); setOpen(null); onChange?.({}) }}
-          className='text-xs text-gray-400 hover:text-red-400 transition-colors ml-auto'
+          className='text-xs text-[var(--color-text-muted)] hover:text-red-500 font-semibold transition-colors ml-auto'
         >
-          Clear all
+          Clear filters
         </button>
       )}
     </div>

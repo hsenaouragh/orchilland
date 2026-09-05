@@ -1,242 +1,347 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { ChevronDown, Person, Moon, Sun, Bars, Xmark } from '@gravity-ui/icons'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { ChevronDown, Person, Moon, Sun, Bars, Xmark, Magnifier, Globe } from '@gravity-ui/icons'
 import Profile from '../../pages/profile'
 import logo from '../../assets/orchillaland.png'
 import { useAuth } from '../../hooks/AuthContext'
 import { useTheme } from '../../hooks/ThemeContext'
 
 const NAV_LINKS = [
-  ['courses', '/courses'],
-  ['offers', '/offers'],
-  ['books', '/books'],
-  ['posts', '/posts'],
-  ['placement Tests', '/placement-test'],
+  { label: 'Courses', to: '/courses' },
+  { label: 'Offers', to: '/offers' },
+  { label: 'Placement Tests', to: '/placement-test' },
+  { label: 'Reviews', to: '/#reviews' },
+  { label: 'About', to: '/#why-choose' },
+  { label: 'Books', to: '/books' },
+  { label: 'Posts', to: '/posts' },
 ]
 
-// ─── Brand palette ────────────────────────────────────────────────────────────
-const C = {
-  orange:      'var(--color-accent)',
-  maroon:      'var(--color-primary)',
-  maroonHov:   'var(--color-primary-hover)',
-  brown:       'var(--color-text-body)',
-  white:       'var(--color-surface)',
-  border:      'var(--color-border)',
-  text:        'var(--color-text)',
-  textMuted:   'var(--color-text-muted)',
-  orangeFaint: 'var(--color-accent-faint)',
-}
+const LANGUAGES_LIST = [
+  { code: 'en', label: 'English', flag: '🇬🇧' },
+  { code: 'fr', label: 'Français', flag: '🇫🇷' },
+  { code: 'it', label: 'Italiano', flag: '🇮🇹' },
+  { code: 'ko', label: '한국어', flag: '🇰🇷' },
+  { code: 'ar', label: 'العربية', flag: '🇩🇿' },
+]
 
-const tint = (color, amount) => `color-mix(in srgb, ${color} ${amount}%, transparent)`
-
-// ─── Header ───────────────────────────────────────────────────────────────────
 const Header = () => {
   const { user, isLoggedIn, openAuth } = useAuth()
   const { theme, toggleTheme } = useTheme()
   const location = useLocation()
+  const navigate = useNavigate()
 
   const [profileOpen, setProfileOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const profileRef   = useRef(null)
+  const [langOpen, setLangOpen] = useState(false)
+  const [selectedLang, setSelectedLang] = useState('English')
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
 
-  // Close the mobile menu whenever the route changes.
-  useEffect(() => { setMenuOpen(false) }, [location.pathname])
+  const profileRef = useRef(null)
+  const langRef = useRef(null)
+  const searchInputRef = useRef(null)
 
-  // Close dropdown on outside click
+  // Close menus on route change
+  useEffect(() => {
+    setMenuOpen(false)
+    setLangOpen(false)
+    setSearchOpen(false)
+  }, [location.pathname])
+
+  // Close dropdowns on click outside
   useEffect(() => {
     const handler = (e) => {
       if (profileRef.current && !profileRef.current.contains(e.target)) {
         setProfileOpen(false)
+      }
+      if (langRef.current && !langRef.current.contains(e.target)) {
+        setLangOpen(false)
       }
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
   }, [])
 
-  // Close profile dropdown whenever user logs out
   useEffect(() => {
     if (!isLoggedIn) setProfileOpen(false)
   }, [isLoggedIn])
 
-  // Inject dropdown animation once
+  // Focus search input when modal opens
   useEffect(() => {
-    if (document.getElementById('header-anim')) return
-    const s = document.createElement('style')
-    s.id = 'header-anim'
-    s.textContent = `@keyframes dropIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}`
-    document.head.appendChild(s)
-  }, [])
+    if (searchOpen && searchInputRef.current) {
+      searchInputRef.current.focus()
+    }
+  }, [searchOpen])
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault()
+    if (searchQuery.trim()) {
+      navigate(`/courses?q=${encodeURIComponent(searchQuery.trim())}`)
+      setSearchOpen(false)
+      setSearchQuery('')
+    }
+  }
 
   // Derive display values from live user
-  const displayName   = user?.name   || ''
+  const displayName = user?.name || ''
   const displayAvatar = user?.avatar || displayName.slice(0, 2).toUpperCase()
   const displayAvatarUrl = user?.avatarUrl || null
 
   return (
-    <div
-      className='relative text-xl flex justify-between items-center gap-2 m-4 bg-white dark:bg-slate-900 p-4 rounded-full border border-transparent dark:border-slate-700 text-[var(--color-text)]'
-      style={{ boxShadow: '0 2px 16px rgba(0,0,0,0.08)' }}
-    >
-
-      {/* Logo */}
-      <Link to='/' style={{ display: 'flex', alignItems: 'center' }}>
-        <img
-          src={logo}
-          alt='OrchillaLand'
-          style={{ height: 40, width: 'auto', display: 'block' }}
-        />
-      </Link>
-
-      {/* Navigation — desktop */}
-      <ul
-        className='hidden xl:flex items-center gap-12 font-semibold text-base'
-        style={{ margin: 0, padding: 0, listStyle: 'none' }}
-      >
-        {NAV_LINKS.map(([label, to]) => (
-          <li key={to}><Link to={to}>{label}</Link></li>
-        ))}
-      </ul>
-
-      {/* Mobile dropdown menu */}
-      {menuOpen && (
-        <div className='xl:hidden absolute left-0 right-0 top-full mt-3 rounded-3xl bg-white dark:bg-slate-900 border border-[var(--color-border)] p-2 z-50' style={{ boxShadow: '0 16px 40px rgba(0,0,0,0.14)' }}>
-          {NAV_LINKS.map(([label, to]) => (
-            <Link
-              key={to}
-              to={to}
-              onClick={() => setMenuOpen(false)}
-              className='block px-4 py-3 rounded-2xl text-base font-semibold text-[var(--color-text)] hover:bg-[var(--color-accent-faint)] transition-colors'
-            >
-              {label}
-            </Link>
-          ))}
-        </div>
-      )}
-
-
-      {/* Right actions */}
-      <div className='flex items-center gap-3'>
-
-        {/* Hamburger — only below xl */}
-        <button
-          onClick={() => setMenuOpen(o => !o)}
-          aria-label='Toggle menu'
-          className='xl:hidden w-10 h-10 rounded-full border flex items-center justify-center'
-          style={{ borderColor: C.border, background: C.white, color: C.textMuted }}
+    <>
+      <header className='sticky top-3 z-40 px-4 max-w-7xl mx-auto'>
+        <div
+          className='flex items-center justify-between gap-4 px-5 py-3 rounded-full bg-white/95 dark:bg-[#3D2020]/95 backdrop-blur-md border border-[var(--color-border)] text-[var(--color-text)] transition-all duration-300'
+          style={{ boxShadow: '0 4px 20px rgba(78, 0, 0, 0.06)' }}
         >
-          {menuOpen ? <Xmark style={{ width: 18, height: 18 }} /> : <Bars style={{ width: 18, height: 18 }} />}
-        </button>
+          {/* ── Brand Logo ── */}
+          <Link to='/' className='flex items-center gap-2 group shrink-0'>
+            <img
+              src={logo}
+              alt='OrchillaLand'
+              className='h-9 w-auto object-contain transition-transform duration-200 group-hover:scale-105'
+            />
+          </Link>
 
-        <button
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-          title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-          className='w-10 h-10 rounded-full border transition-all duration-200 flex items-center justify-center'
-          style={{
-            borderColor: C.border,
-            background: C.white,
-            color: C.textMuted,
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.background = C.orangeFaint
-            e.currentTarget.style.borderColor = C.orange
-            e.currentTarget.style.color = C.orange
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.background = C.white
-            e.currentTarget.style.borderColor = C.border
-            e.currentTarget.style.color = C.textMuted
-          }}
-        >
-          {theme === 'dark'
-            ? <Sun style={{ width: 17, height: 17 }} />
-            : <Moon style={{ width: 17, height: 17 }} />
-          }
-        </button>
+          {/* ── Desktop Navigation ── */}
+          <nav className='hidden lg:flex items-center gap-8 text-[14.5px] font-semibold text-[var(--color-text-body)]'>
+            {NAV_LINKS.slice(0, 5).map(({ label, to }) => {
+              const isAnchor = to.includes('#')
+              return isAnchor ? (
+                <a
+                  key={to}
+                  href={to}
+                  className='hover:text-[var(--color-primary)] dark:hover:text-[var(--color-accent)] transition-colors'
+                >
+                  {label}
+                </a>
+              ) : (
+                <Link
+                  key={to}
+                  to={to}
+                  className={`transition-colors ${
+                    location.pathname === to
+                      ? 'text-[var(--color-primary)] dark:text-[var(--color-accent)] font-bold'
+                      : 'hover:text-[var(--color-primary)] dark:hover:text-[var(--color-accent)]'
+                  }`}
+                >
+                  {label}
+                </Link>
+              )
+            })}
+          </nav>
 
-        {/* ── LOGGED IN: profile trigger + dropdown ── */}
-        {isLoggedIn ? (
-          <div ref={profileRef} style={{ position: 'relative' }}>
+          {/* ── Right Actions ── */}
+          <div className='flex items-center gap-2.5'>
+            {/* Search Trigger */}
             <button
-              onClick={() => setProfileOpen(o => !o)}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 8,
-                padding: '6px 14px 6px 6px', borderRadius: 50,
-                border: `1.5px solid ${profileOpen ? C.maroon : C.border}`,
-                background: profileOpen ? tint(C.maroon, 4) : C.white,
-                cursor: 'pointer', transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={e => {
-                if (!profileOpen) {
-                  e.currentTarget.style.borderColor = C.orange
-                  e.currentTarget.style.background = C.orangeFaint
-                }
-              }}
-              onMouseLeave={e => {
-                if (!profileOpen) {
-                  e.currentTarget.style.borderColor = C.border
-                  e.currentTarget.style.background = C.white
-                }
-              }}
+              onClick={() => setSearchOpen(true)}
+              aria-label='Search courses'
+              title='Search'
+              className='w-9 h-9 rounded-full flex items-center justify-center text-[var(--color-text-body)] hover:bg-[var(--color-accent-faint)] transition-colors'
             >
-              {/* Avatar image or initials */}
-              <div style={{
-                width: 30, height: 30, borderRadius: '50%', flexShrink: 0, overflow: 'hidden',
-                background: `linear-gradient(135deg, ${C.maroon}, ${tint(C.maroon, 80)})`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 11, fontWeight: 800, color: C.white,
-              }}>
-                {displayAvatarUrl
-                  ? <img src={displayAvatarUrl} alt='' style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  : displayAvatar}
-              </div>
-
-              {/* First name — large screens only */}
-              <span
-                className='hidden lg:block'
-                style={{
-                  fontSize: 13, fontWeight: 700, color: C.text,
-                  maxWidth: 90, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                }}
-              >
-                {displayName.split(' ')[0]}
-              </span>
-
-              <ChevronDown style={{
-                width: 14, height: 14, color: C.textMuted,
-                transform: profileOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                transition: 'transform 0.2s ease',
-              }} />
+              <Magnifier style={{ width: 17, height: 17 }} />
             </button>
 
-            {/* Profile dropdown — imported from profile.jsx */}
-            {profileOpen && (
-              <Profile onClose={() => setProfileOpen(false)} />
+            {/* Language Selector Dropdown */}
+            <div ref={langRef} className='relative hidden sm:block'>
+              <button
+                onClick={() => setLangOpen(o => !o)}
+                className='flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-[var(--color-text-body)] hover:bg-[var(--color-accent-faint)] transition-colors border border-transparent hover:border-[var(--color-border)]'
+              >
+                <Globe style={{ width: 14, height: 14, color: 'var(--color-text-muted)' }} />
+                <span>{selectedLang}</span>
+                <ChevronDown
+                  style={{
+                    width: 12,
+                    height: 12,
+                    transform: langOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                    transition: 'transform .2s ease',
+                  }}
+                />
+              </button>
+
+              {langOpen && (
+                <div
+                  className='absolute right-0 top-full mt-2 w-36 py-1.5 bg-white dark:bg-[#3D2020] rounded-2xl border border-[var(--color-border)] shadow-xl z-50 animate-fade-in'
+                >
+                  {LANGUAGES_LIST.map(lang => (
+                    <button
+                      key={lang.code}
+                      onClick={() => {
+                        setSelectedLang(lang.label)
+                        setLangOpen(false)
+                      }}
+                      className={`w-full px-3 py-1.5 text-left text-xs font-medium flex items-center gap-2 hover:bg-[var(--color-accent-faint)] transition-colors ${
+                        selectedLang === lang.label
+                          ? 'text-[var(--color-primary)] dark:text-[var(--color-accent)] font-bold'
+                          : 'text-[var(--color-text-body)]'
+                      }`}
+                    >
+                      <span>{lang.flag}</span>
+                      <span>{lang.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Theme Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+              title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+              className='w-9 h-9 rounded-full flex items-center justify-center text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:bg-[var(--color-accent-faint)] transition-colors'
+            >
+              {theme === 'dark' ? <Sun style={{ width: 17, height: 17 }} /> : <Moon style={{ width: 17, height: 17 }} />}
+            </button>
+
+            {/* ── My Account / Login CTA ── */}
+            {isLoggedIn ? (
+              <div ref={profileRef} className='relative'>
+                <button
+                  onClick={() => setProfileOpen(o => !o)}
+                  className='flex items-center gap-2 pl-1 pr-3 py-1 rounded-full border border-[var(--color-border)] hover:border-[var(--color-accent)] transition-colors'
+                  style={{ background: 'var(--color-surface)' }}
+                >
+                  <div className='w-7 h-7 rounded-full overflow-hidden flex items-center justify-center bg-[var(--color-primary)] text-white text-xs font-bold'>
+                    {displayAvatarUrl ? (
+                      <img src={displayAvatarUrl} alt='' className='w-full h-full object-cover' />
+                    ) : (
+                      displayAvatar
+                    )}
+                  </div>
+                  <span className='hidden sm:inline text-xs font-semibold text-[var(--color-text)] max-w-[80px] truncate'>
+                    {displayName.split(' ')[0]}
+                  </span>
+                  <ChevronDown style={{ width: 12, height: 12, color: 'var(--color-text-muted)' }} />
+                </button>
+
+                {profileOpen && <Profile onClose={() => setProfileOpen(false)} />}
+              </div>
+            ) : (
+              <button
+                onClick={() => openAuth()}
+                className='flex items-center gap-1.5 px-5 py-2 rounded-full font-bold text-xs text-white transition-all duration-200 cursor-pointer'
+                style={{
+                  backgroundColor: 'var(--color-primary)',
+                  boxShadow: '0 3px 12px rgba(78, 0, 0, 0.25)',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.backgroundColor = 'var(--color-primary-hover)'
+                  e.currentTarget.style.transform = 'translateY(-1px)'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.backgroundColor = 'var(--color-primary)'
+                  e.currentTarget.style.transform = 'translateY(0)'
+                }}
+              >
+                <Person style={{ width: 14, height: 14 }} />
+                <span>My Account</span>
+              </button>
             )}
+
+            {/* Hamburger Button (Mobile) */}
+            <button
+              onClick={() => setMenuOpen(o => !o)}
+              aria-label='Toggle navigation menu'
+              className='lg:hidden w-9 h-9 rounded-full border border-[var(--color-border)] flex items-center justify-center text-[var(--color-text-body)]'
+            >
+              {menuOpen ? <Xmark style={{ width: 17, height: 17 }} /> : <Bars style={{ width: 17, height: 17 }} />}
+            </button>
           </div>
+        </div>
 
-        ) : (
-          /* ── LOGGED OUT: Log in button ── */
-          <button
-            onClick={() => openAuth()}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 7,
-              padding: '9px 20px', borderRadius: 50, border: 'none',
-              background: C.maroon, color: C.white,
-              fontSize: 13, fontWeight: 700, cursor: 'pointer',
-              boxShadow: `0 3px 14px ${tint(C.maroon, 22)}`,
-              transition: 'all 0.2s ease',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = C.maroonHov; e.currentTarget.style.transform = 'translateY(-1px)' }}
-            onMouseLeave={e => { e.currentTarget.style.background = C.maroon; e.currentTarget.style.transform = 'translateY(0)' }}
+        {/* ── Mobile Menu Dropdown ── */}
+        {menuOpen && (
+          <div
+            className='lg:hidden absolute left-4 right-4 top-full mt-2 rounded-3xl bg-white dark:bg-[#3D2020] border border-[var(--color-border)] p-4 shadow-2xl z-50 animate-fade-in'
           >
-            <Person style={{ width: 15, height: 15 }} />
-            Log in
-          </button>
-        )}
+            <div className='flex flex-col gap-1 pb-3 border-b border-[var(--color-border)]'>
+              {NAV_LINKS.map(({ label, to }) => (
+                <Link
+                  key={to}
+                  to={to}
+                  onClick={() => setMenuOpen(false)}
+                  className='px-4 py-2.5 rounded-2xl text-sm font-semibold text-[var(--color-text)] hover:bg-[var(--color-accent-faint)] transition-colors'
+                >
+                  {label}
+                </Link>
+              ))}
+            </div>
 
-      </div>
-    </div>
+            <div className='flex items-center justify-between pt-3 px-2'>
+              <div className='flex items-center gap-2 text-xs font-semibold text-[var(--color-text-muted)]'>
+                <Globe style={{ width: 14, height: 14 }} />
+                <span>Language: {selectedLang}</span>
+              </div>
+              <button
+                onClick={toggleTheme}
+                className='flex items-center gap-1.5 text-xs font-semibold text-[var(--color-text-muted)] px-3 py-1.5 rounded-full border border-[var(--color-border)]'
+              >
+                {theme === 'dark' ? <Sun style={{ width: 13, height: 13 }} /> : <Moon style={{ width: 13, height: 13 }} />}
+                <span>{theme === 'dark' ? 'Light mode' : 'Dark mode'}</span>
+              </button>
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* ── Search Modal ── */}
+      {searchOpen && (
+        <div
+          className='fixed inset-0 z-50 flex items-start justify-center pt-24 px-4 bg-black/40 backdrop-blur-sm'
+          onClick={() => setSearchOpen(false)}
+        >
+          <div
+            className='w-full max-w-lg bg-white dark:bg-[#3D2020] rounded-3xl border border-[var(--color-border)] p-5 shadow-2xl animate-fade-up'
+            onClick={e => e.stopPropagation()}
+          >
+            <form onSubmit={handleSearchSubmit} className='flex items-center gap-3'>
+              <Magnifier style={{ width: 20, height: 20, color: 'var(--color-accent)' }} />
+              <input
+                ref={searchInputRef}
+                type='text'
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                placeholder='Search courses by language, title, or level...'
+                className='flex-1 bg-transparent border-none outline-none text-base text-[var(--color-text)] placeholder-[var(--color-text-faint)]'
+              />
+              <button
+                type='submit'
+                className='px-4 py-2 rounded-full text-xs font-bold text-white'
+                style={{ background: 'var(--color-primary)' }}
+              >
+                Search
+              </button>
+              <button
+                type='button'
+                onClick={() => setSearchOpen(false)}
+                className='w-8 h-8 rounded-full flex items-center justify-center text-[var(--color-text-muted)] hover:bg-[var(--color-accent-faint)]'
+              >
+                <Xmark style={{ width: 14, height: 14 }} />
+              </button>
+            </form>
+            <div className='flex flex-wrap gap-2 mt-4 pt-3 border-t border-[var(--color-border)] text-xs text-[var(--color-text-muted)]'>
+              <span>Popular searches:</span>
+              {['English', 'French', 'Italian', 'Korean', 'Conversation', 'Grammar'].map(term => (
+                <button
+                  key={term}
+                  type='button'
+                  onClick={() => {
+                    navigate(`/courses?q=${encodeURIComponent(term)}`)
+                    setSearchOpen(false)
+                  }}
+                  className='px-2.5 py-1 rounded-full bg-[var(--color-panel)] hover:bg-[var(--color-accent-faint)] hover:text-[var(--color-primary)] transition-colors'
+                >
+                  {term}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }
 
