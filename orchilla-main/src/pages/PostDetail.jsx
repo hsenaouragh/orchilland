@@ -93,7 +93,7 @@ const PostDetail = () => {
       <div className='rounded-2xl overflow-hidden border border-[var(--color-border)] bg-white dark:bg-slate-900 flex flex-col md:flex-row'>
         {/* ── Left: image ── */}
         {hasImages && (
-          <div className='md:w-[55%] bg-black flex items-center justify-center'>
+          <div className='md:w-[55%]  flex items-center justify-center'>
             <PostGallery images={post.images} alt={post.title} />
           </div>
         )}

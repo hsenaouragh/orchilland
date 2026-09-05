@@ -30,10 +30,6 @@ const Home = () => {
       {/* ── HERO ───────────────── */}
       <div
         className='relative mx-auto px-8 flex flex-col md:flex-row items-center justify-center pt-16 pb-16 gap-10'
-        style={{
-          background:
-            'linear-gradient(135deg, var(--color-bg) 0%, var(--color-surface) 55%, var(--color-primary-soft) 100%)',
-        }}
       >
         <div className='flex flex-col justify-center py-14 md:pr-16 xl:pr-40'>
           <div className='text-center md:text-left space-y-6'>
@@ -71,6 +67,12 @@ const Home = () => {
           <img src={HeroImage} alt='Hero' className='w-80 md:w-[34rem] drop-shadow-xl' />
         </div>
       </div>
+
+      {/* ___ DIVIDER ____ */}
+      <div
+        className='w-1/3 h-1 mx-auto my-6 rounded-full'
+        style={{ backgroundColor: 'var(--color-primary)' }}
+      />
 
       {/* ── LANGUAGE PICKER ───────────────── */}
       <div className='max-w-6xl mx-auto px-4 py-14'>

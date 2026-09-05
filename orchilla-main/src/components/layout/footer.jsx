@@ -49,24 +49,11 @@ const Footer = () => (
       <div>
         <h3 className='text-sm font-semibold uppercase tracking-widest text-white/30 mb-5'>Contact</h3>
         <ul className='space-y-3 text-sm text-white/60'>
-          <li>📍 12 Rue de la Paix, Algiers</li>
+          <li className='flex gap-1'><HiLocationMarker className='hover:text-[#1D9E75]'/> 12 Rue de la Paix, Algiers</li>
           <li><a href='tel:+213555000111' className='hover:text-[#1D9E75] transition-colors duration-200'>+213 555 000 111</a></li>
           <li><a href='mailto:hello@orchilland.com' className='hover:text-[#1D9E75] transition-colors duration-200'>hello@orchilland.com</a></li>
         </ul>
 
-        <div className='mt-6'>
-          <p className='text-xs text-white/30 mb-2 uppercase tracking-widest'>Stay updated</p>
-          <div className='flex gap-2'>
-            <input
-              type='email'
-              placeholder='Your email'
-              className='flex-1 min-w-0 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 outline-none focus:border-[#1D9E75] transition-colors'
-            />
-            <button className='bg-[#1D9E75] hover:bg-[#0F6E56] text-white text-sm px-4 py-2 rounded-lg transition-colors duration-200'>
-              →
-            </button>
-          </div>
-        </div>
       </div>
 
     </div>
