@@ -1,29 +1,18 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaYoutube } from 'react-icons/fa'
-import { ArrowRight, Globe } from '@gravity-ui/icons'
+import { Globe } from '@gravity-ui/icons'
 import logo from '../../assets/orchillaland.png'
 
 const Footer = () => {
-  const [email, setEmail] = useState('')
-  const [subscribed, setSubscribed] = useState(false)
-
-  const handleSubscribe = (e) => {
-    e.preventDefault()
-    if (email.trim() && email.includes('@')) {
-      setSubscribed(true)
-      setEmail('')
-    }
-  }
-
   return (
     <footer
       className='mt-20 text-white rounded-t-[40px] pt-16 pb-10 px-6 sm:px-12'
       style={{ backgroundColor: 'var(--color-footer-bg)' }}
     >
-      <div className='max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 pb-14 border-b border-white/10'>
+      <div className='max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 pb-14 border-b border-white/10'>
         {/* ── Column 1: Brand & Mission ── */}
-        <div className='lg:col-span-2 space-y-5'>
+        <div className='md:col-span-6 lg:col-span-5 space-y-5'>
           <Link to='/' className='inline-block'>
             <div className='flex items-center gap-3 bg-white/10 px-4 py-2 rounded-full w-fit backdrop-blur-sm'>
               <img src={logo} alt='OrchillaLand' className='h-8 w-auto brightness-200 contrast-200' />
@@ -55,7 +44,7 @@ const Footer = () => {
         </div>
 
         {/* ── Column 2: Platform ── */}
-        <div className='space-y-4'>
+        <div className='md:col-span-3 lg:col-span-3 space-y-4'>
           <h4 className='text-sm font-bold tracking-wider uppercase text-white/90'>
             Platform
           </h4>
@@ -71,7 +60,7 @@ const Footer = () => {
         </div>
 
         {/* ── Column 3: Support ── */}
-        <div className='space-y-4'>
+        <div className='md:col-span-3 lg:col-span-4 space-y-4'>
           <h4 className='text-sm font-bold tracking-wider uppercase text-white/90'>
             Support
           </h4>
@@ -82,41 +71,6 @@ const Footer = () => {
             <li><a href='#terms' className='hover:text-white transition-colors'>Terms of Service</a></li>
             <li><a href='#privacy' className='hover:text-white transition-colors'>Privacy Policy</a></li>
           </ul>
-        </div>
-
-        {/* ── Column 4: Newsletter ── */}
-        <div className='space-y-4'>
-          <h4 className='text-sm font-bold tracking-wider uppercase text-white/90'>
-            Subscribe to our newsletter
-          </h4>
-          <p className='text-xs text-white/70 leading-relaxed'>
-            Get learning tips, offers and updates straight to your inbox.
-          </p>
-
-          <form onSubmit={handleSubscribe} className='relative'>
-            <div className='flex items-center bg-[#FFF5EE] dark:bg-[#3D2020] rounded-full p-1 border border-white/20 shadow-inner'>
-              <input
-                type='email'
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                placeholder='Your email'
-                required
-                className='flex-1 bg-transparent px-4 text-xs text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 outline-none border-none'
-              />
-              <button
-                type='submit'
-                aria-label='Subscribe'
-                className='w-8 h-8 rounded-full bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white flex items-center justify-center shrink-0 transition-all duration-200'
-              >
-                <ArrowRight style={{ width: 14, height: 14 }} />
-              </button>
-            </div>
-            {subscribed && (
-              <p className='text-[11px] text-emerald-400 mt-2 font-medium'>
-                ✓ Thank you for subscribing!
-              </p>
-            )}
-          </form>
         </div>
       </div>
 

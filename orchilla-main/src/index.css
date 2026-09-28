@@ -2,6 +2,27 @@
 @config "../tailwind.config.js";
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-heading: "Playfair Display", Georgia, serif;
+  --font-body: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-handwritten: "Caveat", cursive;
+}
+
+.font-heading {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.font-body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+.font-handwritten {
+  font-family: 'Caveat', cursive;
+}
+
+
 /* ─────────────────────────────────────────────────────────────
    LIGHT MODE  — OrchillaLand palette
    #FFFFFF   pure white    → surfaces / cards
@@ -112,6 +133,7 @@ html.dark {
 body {
   min-height: 100vh;
   margin: 0;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   background-color: var(--color-bg);
   color: var(--color-text);
   transition: background-color .25s ease, color .25s ease;

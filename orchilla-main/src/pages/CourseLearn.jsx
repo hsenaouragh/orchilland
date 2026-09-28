@@ -69,10 +69,10 @@ const CourseLearn = () => {
 
   // Calculate course progress percentage from completed lessons
   const progressPercent = useMemo(() => {
-    if (!enrollment?.lessons || enrollment.lessons.length === 0) return 40
+    if (!enrollment?.lessons || enrollment.lessons.length === 0) return 0
     const completed = enrollment.lessons.filter(l => l.status === 'completed').length
     const total = enrollment.lessons.length
-    return total > 0 ? Math.round((completed / total) * 100) : 40
+    return total > 0 ? Math.round((completed / total) * 100) : 0
   }, [enrollment?.lessons])
 
   // Filter lessons based on active tab
@@ -292,7 +292,7 @@ const CourseLearn = () => {
               </div>
               <div className='flex items-center gap-2'>
                 <Persons style={{ width: 16, height: 16, color: 'var(--color-primary)' }} />
-                <span>{course.learners || (course.students > 0 ? `${course.students}+ learners` : '10.2K+ learners')}</span>
+                <span>{course.students > 0 ? `${course.students} enrolled` : (course.type || 'Course Track')}</span>
               </div>
               <div className='flex items-center gap-2'>
                 <ChartColumn style={{ width: 16, height: 16, color: 'var(--color-primary)' }} />
@@ -963,9 +963,9 @@ const CourseLearn = () => {
               <div className='p-3.5 rounded-2xl bg-[var(--color-panel)] border border-[var(--color-border)]'>
                 <div className='flex items-center gap-1.5 text-xs text-[var(--color-text-muted)] font-medium mb-1'>
                   <Persons style={{ width: 13, height: 13, color: 'var(--color-primary)' }} />
-                  <span>Learners</span>
+                  <span>Track Type</span>
                 </div>
-                <p className='text-xs font-bold text-[var(--color-text)]'>{course.learners || (course.students > 0 ? `${course.students}+` : '10.2K+')}</p>
+                <p className='text-xs font-bold text-[var(--color-text)]'>{course.type || 'Standard Track'}</p>
               </div>
 
               <div className='p-3.5 rounded-2xl bg-[var(--color-panel)] border border-[var(--color-border)]'>

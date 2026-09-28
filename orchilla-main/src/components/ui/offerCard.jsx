@@ -1,12 +1,16 @@
 import { useState } from 'react'
 import { Check } from '@gravity-ui/icons'
+import Button from './button'
 import OfferClaimModal from './offerClaimModal'
 import { useProtectedAction } from '../../hooks/AuthContext'
-import { formatDinars } from '../../data/siteData'
+import { formatDinars, LANDMARK_IMAGES } from '../../data/siteData'
+import ParisLandmark from '../../assets/paris_landmark.jpg'
+import RomeLandmark from '../../assets/rome_landmark.jpg'
+import LondonLandmark from '../../assets/london_landmark.jpg'
 
 const STATUS_LABEL = {
   pending: 'Pending review',
-  approved: '✓ Approved',
+  approved: '✓ Claimed',
   denied: 'Denied',
 }
 
@@ -16,7 +20,7 @@ const OfferCard = ({ offer, claim, onClaimed, compact = false }) => {
   const protect = useProtectedAction()
 
   const claimed = !!claim
-  const claimLabel = claim ? (STATUS_LABEL[claim.status] || 'Pending review') : 'Get Offer'
+  const isApproved = claim?.status === 'approved' || claim?.status === 'pending'
   const canClaim = !claimed || claim.status === 'denied'
 
   // Discount badge calculation
@@ -32,11 +36,13 @@ const OfferCard = ({ offer, claim, onClaimed, compact = false }) => {
     `POPULAR -${discountPct}%`
   )
 
+  const landmarkImg = offer.landmark || (offer.language && LANDMARK_IMAGES[offer.language]) || ParisLandmark
+
   return (
     <>
       <div
-        className={`flex flex-col justify-between rounded-3xl border bg-white dark:bg-[#3D2020] transition-all duration-300 ${
-          compact ? 'p-4' : 'p-6'
+        className={`group flex flex-col justify-between rounded-3xl border bg-white dark:bg-[#3D2020] transition-all duration-300 ${
+          compact ? 'p-4' : 'p-5 sm:p-6'
         }`}
         style={{
           borderColor: hovered ? 'var(--color-accent)' : 'var(--color-border)',
@@ -47,86 +53,92 @@ const OfferCard = ({ offer, claim, onClaimed, compact = false }) => {
         onMouseLeave={() => setHovered(false)}
       >
         <div>
-          {/* Top Badge */}
-          <div className='flex items-center justify-between gap-2 mb-3'>
-            <span
-              className='text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full'
-              style={{
-                background: discountPct >= 50 ? '#FEE2E2' : discountPct >= 40 ? '#EDE9FE' : '#DCFCE7',
-                color: discountPct >= 50 ? '#DC2626' : discountPct >= 40 ? '#7C3AED' : '#16A34A',
-              }}
-            >
-              {badgeText}
-            </span>
-            {offer.discountPercent > 0 && !badgeText.includes('%') && (
-              <span className='text-xs font-bold text-emerald-600'>-{offer.discountPercent}%</span>
-            )}
-          </div>
+          {/* Top Row: Thumbnail Landmark on Left + Details on Right */}
+          <div className='flex gap-3.5 sm:gap-4 items-start mb-3'>
+            {/* Thumbnail Landmark with Discount Badge Overlay */}
+            <div className='relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden shrink-0 shadow-sm border border-black/10 bg-[var(--color-panel)]'>
+              <img
+                src={landmarkImg}
+                alt={offer.title}
+                className='w-full h-full object-cover transition-transform duration-500 group-hover:scale-105'
+              />
+              <div className='absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent' />
 
-          {/* Title & Description */}
-          <div className='mb-3'>
-            <h3 className='text-base font-bold text-[var(--color-text)] mb-1 leading-snug'>
-              {offer.title}
-            </h3>
-            {offer.description && (
-              <p className='text-xs text-[var(--color-text-muted)] line-clamp-2 leading-relaxed'>
-                {offer.description}
+              {/* Overlay Badge */}
+              <div className='absolute top-2 left-2'>
+                <span
+                  className='text-[9px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full shadow-sm'
+                  style={{
+                    background: discountPct >= 50 ? '#FEE2E2' : discountPct >= 40 ? '#EDE9FE' : '#DCFCE7',
+                    color: discountPct >= 50 ? '#DC2626' : discountPct >= 40 ? '#7C3AED' : '#16A34A',
+                  }}
+                >
+                  {badgeText}
+                </span>
+              </div>
+            </div>
+
+            {/* Right Details */}
+            <div className='flex-1 min-w-0 space-y-1'>
+              <p className='text-[10px] font-extrabold uppercase tracking-wider text-[var(--color-accent)]'>
+                Language • {offer.language || 'Language Track'}
               </p>
-            )}
+              <h3 className='font-heading text-base sm:text-lg font-bold text-[var(--color-text)] leading-snug group-hover:text-[var(--color-primary)] dark:group-hover:text-[var(--color-accent)] transition-colors'>
+                {offer.title}
+              </h3>
+              {offer.description && (
+                <p className='text-xs text-[var(--color-text-body)] line-clamp-2 leading-relaxed'>
+                  {offer.description}
+                </p>
+              )}
+            </div>
           </div>
 
-          {/* Included Courses */}
+          {/* Included Courses Panel */}
           {offer.courses && offer.courses.length > 0 && (
-            <div className='space-y-1.5 mb-4 p-2.5 rounded-2xl bg-[var(--color-panel)] border border-[var(--color-border)]'>
-              <p className='text-[10.5px] font-bold uppercase tracking-wider text-[var(--color-text-muted)] mb-1'>
-                Included courses:
+            <div className='space-y-1.5 mb-4 p-3 rounded-2xl bg-[var(--color-panel)] border border-[var(--color-border)]/60'>
+              <p className='text-[10px] font-extrabold uppercase tracking-wider text-[var(--color-text-muted)]'>
+                Includes {offer.courses.length} courses
               </p>
-              {offer.courses.map(c => (
-                <div key={c.id} className='flex items-center gap-1.5'>
-                  <Check style={{ width: 13, height: 13, color: '#1D9E75', shrink: 0 }} />
-                  <span className='text-xs font-medium text-[var(--color-text-body)] truncate'>
-                    {c.title}
-                  </span>
-                </div>
-              ))}
+              <div className='space-y-1'>
+                {offer.courses.map((c, i) => (
+                  <div key={c.id || i} className='flex items-center gap-1.5'>
+                    <Check style={{ width: 12, height: 12, color: 'var(--color-primary)', shrink: 0 }} />
+                    <span className='text-[11.5px] font-medium text-[var(--color-text-body)] truncate'>
+                      {typeof c === 'string' ? c : c.title}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
 
-        {/* Pricing & CTA */}
-        <div className='pt-3 border-t border-[var(--color-border)] mt-2'>
-          <div className='flex items-baseline justify-between mb-3'>
-            <div>
-              {offer.originalPrice > offer.price && (
-                <p className='text-[11px] text-[var(--color-text-faint)] line-through'>
-                  {formatDinars(offer.originalPrice)}
-                </p>
-              )}
-              <p className='text-base font-extrabold text-[var(--color-text)]'>
-                {formatDinars(offer.price)}
+        {/* Pricing & Action */}
+        <div className='pt-3 border-t border-[var(--color-border)]/60 mt-1 flex items-end justify-between gap-3'>
+          <div>
+            {offer.originalPrice > offer.price && (
+              <p className='text-[11px] text-[var(--color-text-faint)] line-through font-medium'>
+                {formatDinars(offer.originalPrice)}
               </p>
-            </div>
+            )}
+            <p className='font-heading text-lg sm:text-xl font-black text-[var(--color-text)]'>
+              {formatDinars(offer.price)}
+            </p>
           </div>
 
-          <button
-            onClick={canClaim ? protect(() => setShowClaim(true)) : undefined}
-            disabled={!canClaim && claim?.status !== 'denied'}
-            className='w-full py-2.5 rounded-full text-xs font-bold text-white transition-all duration-200'
-            style={{
-              backgroundColor: canClaim ? 'var(--color-primary)' : 'var(--color-panel)',
-              color: canClaim ? '#FFFFFF' : 'var(--color-text-muted)',
-              boxShadow: canClaim ? '0 2px 10px rgba(78, 0, 0, 0.2)' : 'none',
-              cursor: canClaim ? 'pointer' : 'default',
-            }}
-            onMouseEnter={e => {
-              if (canClaim) e.currentTarget.style.backgroundColor = 'var(--color-primary-hover)'
-            }}
-            onMouseLeave={e => {
-              if (canClaim) e.currentTarget.style.backgroundColor = 'var(--color-primary)'
-            }}
-          >
-            {canClaim && claim?.status === 'denied' ? 'Re-claim' : claimLabel}
-          </button>
+          {claimed && !canClaim ? (
+            <span className='inline-flex items-center gap-1 px-4 py-2 rounded-full text-xs font-bold bg-[#FBE8E8] dark:bg-[#451E1E] text-[var(--color-primary)] dark:text-[#F8C8C8] border border-[var(--color-border)]'>
+              {isApproved ? '✓ Claimed' : 'Pending Review'}
+            </span>
+          ) : (
+            <Button
+              size='sm'
+              onClick={protect(() => setShowClaim(true))}
+            >
+              {claimed && claim?.status === 'denied' ? 'Re-claim →' : 'Claim Bundle →'}
+            </Button>
+          )}
         </div>
       </div>
 

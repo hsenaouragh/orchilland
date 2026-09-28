@@ -14,6 +14,7 @@ import { FaAward } from 'react-icons/fa'
 import Reviews from '../components/ui/reviews'
 import OfferList from '../components/layout/offerList'
 import Modal from '../components/ui/modal'
+import Button from '../components/ui/button'
 import Membership from '../components/ui/membership'
 
 import French from '../assets/french.png'
@@ -35,8 +36,6 @@ const POPULAR_LANGUAGES = [
     landmark: LondonLandmark,
     level: 'Beginner – Advanced',
     desc: 'Build fluency and confidence in real-life situations.',
-    learners: '12.4K+ learners',
-    rating: '4.8 (1.2K reviews)',
   },
   {
     id: 'french',
@@ -45,8 +44,6 @@ const POPULAR_LANGUAGES = [
     landmark: ParisLandmark,
     level: 'Beginner – Advanced',
     desc: 'Master the language of culture, travel and opportunity.',
-    learners: '10.2K+ learners',
-    rating: '4.7 (1.1K reviews)',
   },
   {
     id: 'italian',
@@ -55,8 +52,6 @@ const POPULAR_LANGUAGES = [
     landmark: RomeLandmark,
     level: 'Beginner – Advanced',
     desc: "Speak like a local and discover Italy's rich culture.",
-    learners: '8.6K+ learners',
-    rating: '4.6 (980 reviews)',
   },
   {
     id: 'korean',
@@ -65,8 +60,6 @@ const POPULAR_LANGUAGES = [
     landmark: SeoulLandmark,
     level: 'Beginner – Advanced',
     desc: 'Learn the language of K-pop, tech and innovation.',
-    learners: '7.4K+ learners',
-    rating: '4.7 (1,034 reviews)',
   },
 ]
 
@@ -105,32 +98,23 @@ const Home = () => {
 
             {/* CTAs */}
             <div className='flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2'>
-              <Link
+              <Button
+                as={Link}
                 to='/courses'
-                className='inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-bold text-white transition-all duration-200 cursor-pointer'
-                style={{
-                  backgroundColor: 'var(--color-primary)',
-                  boxShadow: '0 4px 16px rgba(78, 0, 0, 0.28)',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.backgroundColor = 'var(--color-primary-hover)'
-                  e.currentTarget.style.transform = 'translateY(-1px)'
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.backgroundColor = 'var(--color-primary)'
-                  e.currentTarget.style.transform = 'translateY(0)'
-                }}
+                size='lg'
               >
                 <span>Browse Courses</span>
                 <ArrowRight style={{ width: 15, height: 15 }} />
-              </Link>
+              </Button>
 
-              <Link
+              <Button
+                as={Link}
                 to='/placement-test'
-                className='inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-bold border-2 border-[var(--color-primary)] dark:border-[var(--color-accent)] text-[var(--color-text-body)] hover:bg-[var(--color-panel)] transition-all duration-200 cursor-pointer'
+                variant='outline'
+                size='lg'
               >
                 Take a Placement Test
-              </Link>
+              </Button>
             </div>
           </div>
 
@@ -296,35 +280,27 @@ const Home = () => {
                       {lang.desc}
                     </p>
 
-                    {/* Social Proof + Rating */}
-                    <div className='flex items-center justify-between pt-2 text-xs'>
-                      <div className='flex items-center gap-2'>
-                        <span className='text-[11px] font-semibold text-[var(--color-text-muted)]'>
-                          👥 {lang.learners}
-                        </span>
-                      </div>
-                      <div className='flex items-center gap-1 font-bold text-[11px] text-amber-500'>
-                        <span>★</span>
-                        <span className='text-[var(--color-text)]'>{lang.rating}</span>
-                      </div>
+                    {/* Course Track Meta */}
+                    <div className='flex items-center justify-between pt-2 text-xs border-t border-[var(--color-border)]/50'>
+                      <span className='text-[11px] font-semibold text-[var(--color-text-muted)]'>
+                        Comprehensive Track
+                      </span>
+                      <span className='text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full'>
+                        Available
+                      </span>
                     </div>
                   </div>
                 </div>
 
                 {/* Button CTA */}
                 <div className='px-5 pb-5 pt-0'>
-                  <button
+                  <Button
+                    fullWidth
+                    size='sm'
                     onClick={() => handleChooseLanguage(lang.id)}
-                    className='w-full py-2.5 rounded-full text-xs font-bold text-white transition-all duration-200 cursor-pointer'
-                    style={{
-                      backgroundColor: 'var(--color-primary)',
-                      boxShadow: '0 2px 10px rgba(78, 0, 0, 0.2)',
-                    }}
-                    onMouseEnter={e => e.currentTarget.style.backgroundColor = 'var(--color-primary-hover)'}
-                    onMouseLeave={e => e.currentTarget.style.backgroundColor = 'var(--color-primary)'}
                   >
-                    View Course
-                  </button>
+                    View Courses
+                  </Button>
                 </div>
               </div>
             ))}
@@ -371,19 +347,19 @@ const Home = () => {
                 <div className='space-y-1 text-[10.5px] text-[var(--color-text-muted)]'>
                   <div className='flex items-center gap-1'>
                     <Check style={{ width: 11, height: 11, color: '#1D9E75' }} />
-                    <span>Listening</span>
+                    <span>Reading</span>
                   </div>
                   <div className='flex items-center gap-1'>
                     <Check style={{ width: 11, height: 11, color: '#1D9E75' }} />
-                    <span>Reading</span>
+                    <span>Comprehension</span>
                   </div>
                   <div className='flex items-center gap-1'>
                     <Check style={{ width: 11, height: 11, color: '#1D9E75' }} />
                     <span>Grammar</span>
                   </div>
-                  <div className='flex items-center gap-1'>
+                   <div className='flex items-center gap-1'>
                     <Check style={{ width: 11, height: 11, color: '#1D9E75' }} />
-                    <span>Speaking</span>
+                    <span>Writing</span>
                   </div>
                 </div>
                 <div className='absolute -bottom-2 -right-1 text-purple-400 rotate-12'>
@@ -441,41 +417,41 @@ const Home = () => {
             </p>
           </div>
 
-          {/* 4 Stat Columns */}
+          {/* 4 Value Pillars */}
           <div className='grid grid-cols-2 sm:grid-cols-4 gap-4 text-center pt-4 border-t border-[var(--color-border)]/60'>
             <div>
-              <p className='text-xl sm:text-2xl font-black text-[var(--color-primary)] dark:text-[var(--color-accent)]'>
-                50,000+
+              <p className='text-sm sm:text-base font-black text-[var(--color-primary)] dark:text-[var(--color-accent)]'>
+                Certified
               </p>
               <p className='text-[11px] font-semibold text-[var(--color-text-muted)] mt-0.5'>
-                Active Learners
+                Native Tutors
               </p>
             </div>
 
             <div>
-              <p className='text-xl sm:text-2xl font-black text-[var(--color-primary)] dark:text-[var(--color-accent)]'>
-                200+
+              <p className='text-sm sm:text-base font-black text-[var(--color-primary)] dark:text-[var(--color-accent)]'>
+                Structured
               </p>
               <p className='text-[11px] font-semibold text-[var(--color-text-muted)] mt-0.5'>
-                Courses
+                A1 to C2 Tracks
               </p>
             </div>
 
             <div>
-              <p className='text-xl sm:text-2xl font-black text-[var(--color-primary)] dark:text-[var(--color-accent)]'>
-                95%
+              <p className='text-sm sm:text-base font-black text-[var(--color-primary)] dark:text-[var(--color-accent)]'>
+                Practical
               </p>
               <p className='text-[11px] font-semibold text-[var(--color-text-muted)] mt-0.5'>
-                Satisfaction Rate
+                Speaking Drills
               </p>
             </div>
 
             <div>
-              <p className='text-xl sm:text-2xl font-black text-[var(--color-primary)] dark:text-[var(--color-accent)]'>
-                4.8/5
+              <p className='text-sm sm:text-base font-black text-[var(--color-primary)] dark:text-[var(--color-accent)]'>
+                Verified
               </p>
               <p className='text-[11px] font-semibold text-[var(--color-text-muted)] mt-0.5'>
-                Average Rating
+                Certifications
               </p>
             </div>
           </div>
@@ -485,31 +461,6 @@ const Home = () => {
         <div className='lg:col-span-6 bg-white dark:bg-[#3D2020] rounded-3xl p-8 md:p-10 border border-[var(--color-border)] shadow-sm'>
           <Reviews />
         </div>
-      </section>
-
-      {/* ── MEMBERSHIP ACCORDION / TOGGLE (PRESERVED) ───────────────── */}
-      <section className='rounded-3xl border border-[var(--color-border)] bg-[var(--color-panel)] p-6'>
-        <div className='flex items-center justify-between'>
-          <div>
-            <h4 className='text-sm font-bold text-[var(--color-text)]'>
-              Looking for unlimited access?
-            </h4>
-            <p className='text-xs text-[var(--color-text-muted)]'>
-              Enroll in multiple courses to unlock our exclusive VIP Club membership benefits.
-            </p>
-          </div>
-          <button
-            onClick={() => setShowMembership(o => !o)}
-            className='px-4 py-2 rounded-full text-xs font-bold border border-[var(--color-border)] text-[var(--color-primary)] dark:text-[var(--color-accent)] hover:bg-white dark:hover:bg-[#3D2020] transition-colors'
-          >
-            {showMembership ? 'Hide Details' : 'View Membership Plans'}
-          </button>
-        </div>
-        {showMembership && (
-          <div className='mt-6 pt-6 border-t border-[var(--color-border)] animate-fade-in'>
-            <Membership />
-          </div>
-        )}
       </section>
 
       {/* ── 5. PRE-FOOTER CTA BANNER ─────────────────────────────────── */}
@@ -545,27 +496,16 @@ const Home = () => {
           </div>
 
           {/* Right Button */}
-          <div className='md:col-span-3 flex justify-center md:justify-end'>
-            <Link
+            <Button
+              as={Link}
               to='/courses'
-              className='inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-200 shadow-xl'
-              style={{
-                backgroundColor: '#FFF5EE',
-                color: '#4E0000',
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.backgroundColor = '#FFFFFF'
-                e.currentTarget.style.transform = 'translateY(-1px)'
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.backgroundColor = '#FFF5EE'
-                e.currentTarget.style.transform = 'translateY(0)'
-              }}
+              fullWidth
+              size='lg'
+              className='!bg-[#FFF5EE] !text-[#4E0000] hover:!bg-white'
             >
               <span>Browse Courses</span>
               <ArrowRight style={{ width: 14, height: 14 }} />
-            </Link>
-          </div>
+            </Button>
         </div>
       </section>
 

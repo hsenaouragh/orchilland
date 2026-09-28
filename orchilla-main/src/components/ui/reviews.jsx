@@ -7,7 +7,7 @@ const FEATURED_TESTIMONIALS = [
     id: 'test-1',
     name: 'Sarah',
     country: 'Algeria',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=96&h=96&fit=crop&crop=face',
+    avatar: null,
     rating: 5,
     text: 'OrchillaLand made learning English so easy and enjoyable. I can now speak with confidence!',
   },
@@ -15,7 +15,7 @@ const FEATURED_TESTIMONIALS = [
     id: 'test-2',
     name: 'Karim',
     country: 'France',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=96&h=96&fit=crop&crop=face',
+    avatar: null,
     rating: 5,
     text: 'The placement test helped me find the right level. The courses are well structured and fun!',
   },
@@ -23,7 +23,7 @@ const FEATURED_TESTIMONIALS = [
     id: 'test-3',
     name: 'Lina',
     country: 'Italy',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=96&h=96&fit=crop&crop=face',
+    avatar: null,
     rating: 5,
     text: 'Great platform with amazing teachers. I love the interactive lessons and real-time practice.',
   },
@@ -88,11 +88,17 @@ const Reviews = () => {
 
               {/* Student Info */}
               <div className='flex items-center gap-2.5 pt-2 border-t border-[var(--color-border)]/60'>
-                <img
-                  src={t.avatar}
-                  alt={t.name}
-                  className='w-7 h-7 rounded-full object-cover ring-2 ring-white dark:ring-[#3D2020]'
-                />
+                {t.avatar ? (
+                  <img
+                    src={t.avatar}
+                    alt={t.name}
+                    className='w-7 h-7 rounded-full object-cover ring-2 ring-white dark:ring-[#3D2020]'
+                  />
+                ) : (
+                  <div className='w-7 h-7 rounded-full bg-[var(--color-primary)] text-white flex items-center justify-center text-[11px] font-bold shrink-0'>
+                    {(t.name || '?').charAt(0).toUpperCase()}
+                  </div>
+                )}
                 <div>
                   <h4 className='text-xs font-bold text-[var(--color-text)] leading-none'>
                     {t.name}

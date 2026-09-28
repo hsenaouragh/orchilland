@@ -9,12 +9,10 @@ import { useTheme } from '../../hooks/ThemeContext'
 const NAV_LINKS = [
   { label: 'Courses', to: '/courses' },
   { label: 'Offers', to: '/offers' },
-  { label: 'Placement Tests', to: '/placement-test' },
-  { label: 'Reviews', to: '/#reviews' },
-  { label: 'About', to: '/#why-choose' },
   { label: 'Books', to: '/books' },
-  { label: 'Posts', to: '/posts' },
+  { label: 'About', to: '/#why-choose' },
 ]
+
 
 const LANGUAGES_LIST = [
   { code: 'en', label: 'English', flag: '🇬🇧' },
@@ -105,7 +103,7 @@ const Header = () => {
 
           {/* ── Desktop Navigation ── */}
           <nav className='hidden lg:flex items-center gap-8 text-[14.5px] font-semibold text-[var(--color-text-body)]'>
-            {NAV_LINKS.slice(0, 5).map(({ label, to }) => {
+            {NAV_LINKS.map(({ label, to }) => {
               const isAnchor = to.includes('#')
               return isAnchor ? (
                 <a
@@ -133,59 +131,6 @@ const Header = () => {
 
           {/* ── Right Actions ── */}
           <div className='flex items-center gap-2.5'>
-            {/* Search Trigger */}
-            <button
-              onClick={() => setSearchOpen(true)}
-              aria-label='Search courses'
-              title='Search'
-              className='w-9 h-9 rounded-full flex items-center justify-center text-[var(--color-text-body)] hover:bg-[var(--color-accent-faint)] transition-colors'
-            >
-              <Magnifier style={{ width: 17, height: 17 }} />
-            </button>
-
-            {/* Language Selector Dropdown */}
-            <div ref={langRef} className='relative hidden sm:block'>
-              <button
-                onClick={() => setLangOpen(o => !o)}
-                className='flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-[var(--color-text-body)] hover:bg-[var(--color-accent-faint)] transition-colors border border-transparent hover:border-[var(--color-border)]'
-              >
-                <Globe style={{ width: 14, height: 14, color: 'var(--color-text-muted)' }} />
-                <span>{selectedLang}</span>
-                <ChevronDown
-                  style={{
-                    width: 12,
-                    height: 12,
-                    transform: langOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                    transition: 'transform .2s ease',
-                  }}
-                />
-              </button>
-
-              {langOpen && (
-                <div
-                  className='absolute right-0 top-full mt-2 w-36 py-1.5 bg-white dark:bg-[#3D2020] rounded-2xl border border-[var(--color-border)] shadow-xl z-50 animate-fade-in'
-                >
-                  {LANGUAGES_LIST.map(lang => (
-                    <button
-                      key={lang.code}
-                      onClick={() => {
-                        setSelectedLang(lang.label)
-                        setLangOpen(false)
-                      }}
-                      className={`w-full px-3 py-1.5 text-left text-xs font-medium flex items-center gap-2 hover:bg-[var(--color-accent-faint)] transition-colors ${
-                        selectedLang === lang.label
-                          ? 'text-[var(--color-primary)] dark:text-[var(--color-accent)] font-bold'
-                          : 'text-[var(--color-text-body)]'
-                      }`}
-                    >
-                      <span>{lang.flag}</span>
-                      <span>{lang.label}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
@@ -258,26 +203,34 @@ const Header = () => {
             className='lg:hidden absolute left-4 right-4 top-full mt-2 rounded-3xl bg-white dark:bg-[#3D2020] border border-[var(--color-border)] p-4 shadow-2xl z-50 animate-fade-in'
           >
             <div className='flex flex-col gap-1 pb-3 border-b border-[var(--color-border)]'>
-              {NAV_LINKS.map(({ label, to }) => (
-                <Link
-                  key={to}
-                  to={to}
-                  onClick={() => setMenuOpen(false)}
-                  className='px-4 py-2.5 rounded-2xl text-sm font-semibold text-[var(--color-text)] hover:bg-[var(--color-accent-faint)] transition-colors'
-                >
-                  {label}
-                </Link>
-              ))}
+              {NAV_LINKS.map(({ label, to }) => {
+                const isAnchor = to.includes('#')
+                return isAnchor ? (
+                  <a
+                    key={to}
+                    href={to}
+                    onClick={() => setMenuOpen(false)}
+                    className='px-4 py-2.5 rounded-2xl text-sm font-semibold text-[var(--color-text)] hover:bg-[var(--color-accent-faint)] transition-colors'
+                  >
+                    {label}
+                  </a>
+                ) : (
+                  <Link
+                    key={to}
+                    to={to}
+                    onClick={() => setMenuOpen(false)}
+                    className='px-4 py-2.5 rounded-2xl text-sm font-semibold text-[var(--color-text)] hover:bg-[var(--color-accent-faint)] transition-colors'
+                  >
+                    {label}
+                  </Link>
+                )
+              })}
             </div>
 
-            <div className='flex items-center justify-between pt-3 px-2'>
-              <div className='flex items-center gap-2 text-xs font-semibold text-[var(--color-text-muted)]'>
-                <Globe style={{ width: 14, height: 14 }} />
-                <span>Language: {selectedLang}</span>
-              </div>
+            <div className='flex items-center justify-end pt-3 px-2'>
               <button
                 onClick={toggleTheme}
-                className='flex items-center gap-1.5 text-xs font-semibold text-[var(--color-text-muted)] px-3 py-1.5 rounded-full border border-[var(--color-border)]'
+                className='flex items-center gap-1.5 text-xs font-semibold text-[var(--color-text-muted)] px-3 py-1.5 rounded-full border border-[var(--color-border)] hover:bg-[var(--color-accent-faint)] transition-colors'
               >
                 {theme === 'dark' ? <Sun style={{ width: 13, height: 13 }} /> : <Moon style={{ width: 13, height: 13 }} />}
                 <span>{theme === 'dark' ? 'Light mode' : 'Dark mode'}</span>

@@ -1,15 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Form from './form'
+import Button from './button'
 import { useProtectedAction } from '../../hooks/AuthContext'
 import { LANDMARK_IMAGES } from '../../data/siteData'
-
-// Dummy learner avatar faces for social proof stack
-const LEARNER_AVATARS = [
-  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=64&h=64&fit=crop&crop=face',
-  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face',
-  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=64&h=64&fit=crop&crop=face',
-]
 
 const CourseCard = ({ c, index = 0, enrolled = false, pending = false }) => {
   const ref = useRef(null)
@@ -29,8 +23,6 @@ const CourseCard = ({ c, index = 0, enrolled = false, pending = false }) => {
   }, [])
 
   const landmark = c.landmark || LANDMARK_IMAGES[c.lang] || LANDMARK_IMAGES.English
-  const learners = c.learners || (c.students > 0 ? `${c.students}+ learners` : '10.2K+ learners')
-  const rating = c.rating || '4.8 (1.2K reviews)'
   const tagline = c.tagline || c.description || 'Master conversation, grammar and real-world fluency.'
 
   const handleActionClick = (e) => {
@@ -123,82 +115,47 @@ const CourseCard = ({ c, index = 0, enrolled = false, pending = false }) => {
               {tagline}
             </p>
 
-            {/* Social Proof + Rating */}
-            <div className='flex items-center justify-between pt-1 pb-2 text-xs'>
-              {/* Avatars + Learner Count */}
-              <div className='flex items-center gap-2'>
-                <div className='flex -space-x-2 overflow-hidden'>
-                  {LEARNER_AVATARS.map((src, i) => (
-                    <img
-                      key={i}
-                      src={src}
-                      alt='Learner'
-                      className='inline-block w-5 h-5 rounded-full ring-2 ring-white dark:ring-[#3D2020] object-cover'
-                    />
-                  ))}
-                </div>
-                <span className='text-[11.5px] font-semibold text-[var(--color-text-muted)]'>
-                  {learners}
-                </span>
-              </div>
-
-              {/* Star Rating */}
-              <div className='flex items-center gap-1 font-bold text-[11.5px] text-amber-500'>
-                <span>★</span>
-                <span className='text-[var(--color-text)] dark:text-amber-400'>{rating}</span>
-              </div>
+            {/* Course Metadata & Status */}
+            <div className='flex items-center justify-between pt-1 pb-1 text-xs border-t border-[var(--color-border)]/50'>
+              <span className='text-[11.5px] font-semibold text-[var(--color-text-muted)]'>
+                {c.type || 'Course Track'}
+              </span>
+              <span
+                className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
+                  isAvailable
+                    ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400'
+                    : 'bg-gray-100 dark:bg-gray-800 text-gray-500'
+                }`}
+              >
+                {enrolled ? 'Enrolled' : pending ? 'Pending' : isAvailable ? 'Available' : 'Closed'}
+              </span>
             </div>
-
-            {/* Enrolled Progress Bar */}
-            {enrolled && (
-              <div className='mt-2 pt-2 border-t border-[var(--color-border)]'>
-                <div className='flex items-center justify-between text-[11px] font-semibold text-[var(--color-text-muted)] mb-1'>
-                  <span>Course progress</span>
-                  <span className='text-emerald-600 font-bold'>Active</span>
-                </div>
-                <div className='w-full bg-gray-100 dark:bg-gray-700 h-1.5 rounded-full overflow-hidden'>
-                  <div className='bg-emerald-500 h-full rounded-full' style={{ width: '45%' }} />
-                </div>
-              </div>
-            )}
           </div>
         </div>
 
         {/* ── Card Footer CTA ── */}
         <div className='px-5 pb-5 pt-0'>
           {enrolled ? (
-            <button
+            <Button
+              fullWidth
+              size='sm'
               onClick={handleActionClick}
-              className='w-full py-2.5 rounded-full text-xs font-bold text-white transition-all duration-200'
-              style={{
-                backgroundColor: 'var(--color-primary)',
-                boxShadow: '0 2px 10px rgba(78, 0, 0, 0.2)',
-              }}
             >
               Continue Learning →
-            </button>
+            </Button>
           ) : pending ? (
-            <div className='w-full py-2.5 rounded-full text-xs font-bold text-center bg-[var(--color-accent-faint)] text-[var(--color-accent-hover)] border border-[var(--color-accent-light)]'>
+            <div className='w-full py-2 rounded-full text-xs font-bold text-center bg-[var(--color-accent-faint)] text-[var(--color-accent-hover)] border border-[var(--color-accent-light)]'>
               Pending Review
             </div>
           ) : (
-            <button
-              onClick={handleActionClick}
+            <Button
+              fullWidth
+              size='sm'
               disabled={!isAvailable}
-              className='w-full py-2.5 rounded-full text-xs font-bold text-white transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed'
-              style={{
-                backgroundColor: isAvailable ? 'var(--color-primary)' : 'gray',
-                boxShadow: isAvailable ? '0 2px 10px rgba(78, 0, 0, 0.2)' : 'none',
-              }}
-              onMouseEnter={e => {
-                if (isAvailable) e.currentTarget.style.backgroundColor = 'var(--color-primary-hover)'
-              }}
-              onMouseLeave={e => {
-                if (isAvailable) e.currentTarget.style.backgroundColor = 'var(--color-primary)'
-              }}
+              onClick={handleActionClick}
             >
               {isAvailable ? 'View Course' : 'Closed'}
-            </button>
+            </Button>
           )}
         </div>
       </div>
